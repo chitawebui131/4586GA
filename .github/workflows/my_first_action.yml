@@ -18,4 +18,4 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Use secrets ${{ secrets.MY_SECRET_NAME }}
-      
+      run: echo ${{ secrets.MY_SECRET_NAME }}  

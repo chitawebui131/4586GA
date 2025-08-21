@@ -1,23 +1,43 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
-
-name: Node.js CI
-
+name: Continuous Integration
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
-  workflow_dispatch:  
-
+    branches:
+      - main
+      - jenk
+  workflow_dispatch:
+  
 jobs:
-  build:
+  my_first_job:
+    runs-on: ubuntu-latest
 
-    runs-on: self-hosted
-
-   
     steps:
-    - uses: actions/checkout@v4
-    - name: Use secrets ${{ secrets.MY_SECRET_NAME }}
-      run: echo "Hi!"  
+    
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'zulu'
+
+    - name: Show Java version
+      run: "java -version"
+
+    - name: Checkout code
+      uses: actions/checkout@v3
+      with:
+        ref: jenk
+
+    - name: Show directory
+      run: 'pwd'
+
+    - name: List files
+      run: 'ls -al'
+
+    - name: Install Dependencies
+      run: 'mvn compile'
+
+    - name: Build application
+      run: 'mvn package -DskipTests'
+
+    - name: Test application
+      run: 'mvn test'
+
